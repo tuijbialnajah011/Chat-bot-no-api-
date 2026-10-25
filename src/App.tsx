@@ -263,27 +263,79 @@ export default function App() {
     setErrorBanner(null);
 
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: selectedModel,
-          messages: updatedMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-        }),
-      });
+      const normalizedHistory = updatedMessages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to get response from model');
+      let data: {
+        content?: string;
+        reasoning?: string;
+        resolvedModelLabel?: string;
+        resolvedProvider?: string;
+        totalLatencyMs?: number;
+        attempts?: unknown[];
+        error?: string;
+      } | null = null;
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: selectedModel,
+            messages: normalizedHistory,
+          }),
+        });
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok && contentType.includes('application/json')) {
+          data = await res.json();
+        }
+      } catch {
+        // Fallback below if /api/chat is unavailable
+      }
+
+      if (!data || !data.content) {
+        const fallbackStart = Date.now();
+        const picked =
+          DEFAULT_MODELS.find((m) => m.id === selectedModel && m.id !== 'auto') ||
+          DEFAULT_MODELS[1];
+
+        const fallbackRes = await fetch('https://text.pollinations.ai/openai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'openai-fast',
+            messages: normalizedHistory,
+          }),
+        });
+
+        if (!fallbackRes.ok) {
+          throw new Error(`Request failed (HTTP ${fallbackRes.status})`);
+        }
+
+        const fallbackJson = await fallbackRes.json();
+        const msg = fallbackJson.choices?.[0]?.message;
+        const reasoning = (msg?.reasoning || msg?.reasoning_content || '').trim() || undefined;
+        const text = (msg?.content || '').trim() || reasoning || '';
+        if (!text) {
+          throw new Error('Empty response from model');
+        }
+
+        data = {
+          content: text,
+          reasoning: msg?.content ? reasoning : undefined,
+          resolvedModelLabel: picked.label,
+          resolvedProvider: 'Direct Free Gateway',
+          totalLatencyMs: Date.now() - fallbackStart,
+          attempts: [1],
+        };
       }
 
       const assistantMsg: Message = {
         id: `msg_${Date.now()}_a`,
         role: 'assistant',
-        content: data.content,
+        content: data.content || '',
         reasoning: data.reasoning,
         modelLabel: data.resolvedModelLabel,
         providerName: data.resolvedProvider,
