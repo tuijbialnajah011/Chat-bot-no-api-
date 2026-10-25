@@ -1,0 +1,6 @@
+{
+  "name": "Repository Security Audit Viewer",
+  "description": "Static security and architecture audit report for OmniRoute and freellmapi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
