@@ -186,7 +186,7 @@ export default function App() {
     const el = textareaRef.current;
     if (!el) return;
     el.style.height = 'auto';
-    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+    el.style.height = `${Math.min(el.scrollHeight, 132)}px`;
   };
 
   useEffect(() => {
@@ -380,42 +380,42 @@ export default function App() {
   };
 
   return (
-    <div className="relative h-screen w-full bg-[#060911] text-slate-100 flex overflow-hidden select-none sm:select-auto">
+    <div className="fixed inset-0 w-full h-dvh bg-[#060911] text-slate-100 flex overflow-hidden">
       {/* Subtle Ambient Background Light Diffusion for Glass Depth */}
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 overflow-hidden z-0"
       >
-        <div className="absolute -top-40 left-1/4 w-[520px] h-[520px] rounded-full bg-sky-500/[0.07] blur-[130px]" />
-        <div className="absolute bottom-[-180px] right-1/5 w-[480px] h-[480px] rounded-full bg-indigo-500/[0.06] blur-[140px]" />
+        <div className="absolute -top-36 left-1/4 w-[460px] h-[460px] rounded-full bg-sky-500/[0.08] blur-[120px]" />
+        <div className="absolute -bottom-36 right-1/5 w-[440px] h-[440px] rounded-full bg-indigo-500/[0.07] blur-[130px]" />
       </div>
 
       {/* Mobile Scrim Overlay */}
       {mobileDrawerOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-30 md:hidden"
+          className="fixed inset-0 bg-black/65 backdrop-blur-xs z-30 md:hidden"
           onClick={() => setMobileDrawerOpen(false)}
         />
       )}
 
       {/* Frosted Glass Sidebar */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-40 flex flex-col justify-between transition-all duration-200 ease-out backdrop-blur-2xl bg-white/[0.025] border-r border-white/[0.07] shadow-[inset_-1px_0_0_0_rgba(255,255,255,0.03)] ${
+        className={`fixed md:static inset-y-0 left-0 z-40 flex flex-col justify-between transition-all duration-200 ease-out backdrop-blur-2xl bg-[#090D18]/85 md:bg-white/[0.025] border-r border-white/[0.08] safe-top safe-bottom ${
           mobileDrawerOpen
             ? 'translate-x-0 w-[260px]'
             : '-translate-x-full md:translate-x-0'
-        } ${sidebarOpen ? 'md:w-[260px]' : 'md:w-0 md:overflow-hidden md:border-r-0'}`}
+        } ${sidebarOpen ? 'md:w-[256px]' : 'md:w-0 md:overflow-hidden md:border-r-0'}`}
       >
-        <div className="p-3.5 flex flex-col h-full min-w-[260px]">
+        <div className="p-3.5 flex flex-col h-full min-w-[256px] min-h-0">
           {/* Sidebar Header & New Chat Action */}
-          <div className="flex items-center justify-between gap-2 pb-3">
+          <div className="flex items-center justify-between gap-2 pb-3 shrink-0">
             <span className="text-sm font-semibold tracking-tight text-white/95 px-1.5 whitespace-nowrap">
               OmniFree Chat
             </span>
             <button
               type="button"
               onClick={handleNewChat}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white bg-white/[0.07] hover:bg-white/[0.12] border border-white/[0.1] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)] transition-all cursor-pointer whitespace-nowrap shrink-0"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)] transition-all cursor-pointer whitespace-nowrap shrink-0"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New</span>
@@ -423,7 +423,7 @@ export default function App() {
           </div>
 
           {/* Conversation History List */}
-          <div className="flex-1 overflow-y-auto space-y-1 pr-0.5 mt-1">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-1 pr-0.5 mt-1">
             {sessions.map((session) => {
               const isActive = session.id === activeSession?.id;
               return (
@@ -435,7 +435,7 @@ export default function App() {
                   }}
                   className={`group flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs cursor-pointer transition-all ${
                     isActive
-                      ? 'bg-white/[0.09] text-white font-medium border border-white/[0.1] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]'
+                      ? 'bg-white/[0.1] text-white font-medium border border-white/[0.12]'
                       : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200 border border-transparent'
                   }`}
                 >
@@ -447,7 +447,7 @@ export default function App() {
                     type="button"
                     onClick={(e) => handleDeleteSession(session.id, e)}
                     aria-label="Delete chat"
-                    className="opacity-0 group-hover:opacity-100 p-1 rounded-lg text-slate-400 hover:text-rose-300 hover:bg-white/[0.06] transition-opacity shrink-0 cursor-pointer"
+                    className="opacity-70 md:opacity-0 group-hover:opacity-100 p-1 rounded-lg text-slate-400 hover:text-rose-300 hover:bg-white/[0.06] transition-opacity shrink-0 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -457,118 +457,132 @@ export default function App() {
           </div>
 
           {/* Minimal Glass Footer Info */}
-          <div className="pt-3 mt-2 border-t border-white/[0.06] px-1.5 flex items-center justify-between text-[11px] text-slate-400">
+          <div className="pt-3 mt-2 border-t border-white/[0.07] px-1.5 flex items-center justify-between text-[11px] text-slate-400 shrink-0">
             <span>Smart Failover</span>
             <span className="font-mono tabular-nums text-slate-300">7 Free Models</span>
           </div>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="relative z-10 flex-1 flex flex-col min-w-0 h-full">
-        {/* Translucent Glass Top Navigation Bar */}
-        <header className="h-14 shrink-0 px-4 sm:px-6 flex items-center justify-between gap-4 backdrop-blur-xl bg-[#060911]/60 border-b border-white/[0.07]">
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => {
-                if (window.innerWidth < 768) {
-                  setMobileDrawerOpen(!mobileDrawerOpen);
-                } else {
-                  setSidebarOpen(!sidebarOpen);
-                }
-              }}
-              aria-label="Toggle sidebar"
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors cursor-pointer"
-            >
-              <PanelLeft className="w-4 h-4" />
-            </button>
-
-            {/* Glassmorphic Model Selector Dropdown */}
-            <div className="relative" ref={modelDropdownRef}>
+      {/* Main Column: Pinned Top Header + Scrollable Middle + Pinned Bottom Composer */}
+      <div className="relative z-10 flex-1 flex flex-col min-w-0 min-h-0 h-full overflow-hidden">
+        {/* Pinned Top Bar */}
+        <header className="shrink-0 safe-top backdrop-blur-2xl bg-[#080C17]/80 border-b border-white/[0.08] z-20">
+          <div className="h-14 px-3 sm:px-6 max-w-4xl mx-auto flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
               <button
                 type="button"
-                onClick={() => setModelMenuOpen(!modelMenuOpen)}
-                className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-white backdrop-blur-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/[0.1] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all cursor-pointer whitespace-nowrap"
+                onClick={() => {
+                  if (window.innerWidth < 768) {
+                    setMobileDrawerOpen(!mobileDrawerOpen);
+                  } else {
+                    setSidebarOpen(!sidebarOpen);
+                  }
+                }}
+                aria-label="Toggle sidebar"
+                className="p-2 rounded-xl text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.08] transition-colors cursor-pointer shrink-0"
               >
-                <span>{currentModelObj.label}</span>
-                <span className="text-slate-400 font-normal hidden sm:inline">
-                  · {currentModelObj.providerName}
-                </span>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                <PanelLeft className="w-4 h-4" />
               </button>
 
-              {modelMenuOpen && (
-                <div className="absolute left-0 mt-2 w-64 rounded-2xl p-1.5 backdrop-blur-2xl bg-[#0D1322]/90 border border-white/[0.12] shadow-2xl z-50 space-y-0.5">
-                  {DEFAULT_MODELS.map((m) => {
-                    const active = m.id === selectedModel;
-                    return (
-                      <button
-                        key={m.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedModel(m.id);
-                          setModelMenuOpen(false);
-                        }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
-                          active
-                            ? 'bg-white/[0.11] text-white font-medium'
-                            : 'text-slate-300 hover:bg-white/[0.05] hover:text-white'
-                        }`}
-                      >
-                        <span className="truncate">{m.label}</span>
-                        <span className="text-[11px] font-mono text-slate-400 shrink-0 ml-2">
-                          {m.providerName}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+              {/* Glassmorphic Model Selector Dropdown */}
+              <div className="relative min-w-0" ref={modelDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setModelMenuOpen(!modelMenuOpen)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-medium text-white backdrop-blur-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all cursor-pointer whitespace-nowrap"
+                >
+                  <span className="truncate max-w-[140px] sm:max-w-none">{currentModelObj.label}</span>
+                  <span className="text-slate-400 font-normal hidden sm:inline">
+                    · {currentModelObj.providerName}
+                  </span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                </button>
+
+                {modelMenuOpen && (
+                  <div className="absolute left-0 mt-2 w-64 max-w-[85vw] rounded-2xl p-1.5 backdrop-blur-2xl bg-[#0D1322]/95 border border-white/[0.14] shadow-2xl z-50 space-y-0.5">
+                    {DEFAULT_MODELS.map((m) => {
+                      const active = m.id === selectedModel;
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedModel(m.id);
+                            setModelMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs text-left transition-colors cursor-pointer ${
+                            active
+                              ? 'bg-white/[0.12] text-white font-medium'
+                              : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                          }`}
+                        >
+                          <span className="truncate">{m.label}</span>
+                          <span className="text-[11px] font-mono text-slate-400 shrink-0 ml-2">
+                            {m.providerName}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleNewChat}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-white bg-white/[0.06] hover:bg-white/[0.11] border border-white/[0.1] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">New Chat</span>
+              </button>
+
+              {activeSession && activeSession.messages.length > 0 && (
+                <button
+                  type="button"
+                  onClick={handleClearCurrentChat}
+                  aria-label="Reset conversation"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.09] border border-white/[0.08] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Clear</span>
+                </button>
               )}
             </div>
           </div>
-
-          {activeSession && activeSession.messages.length > 0 && (
-            <button
-              type="button"
-              onClick={handleClearCurrentChat}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset</span>
-            </button>
-          )}
         </header>
 
-        {/* Scrollable Chat Viewport */}
-        <main className="flex-1 overflow-y-auto px-4 sm:px-6 pt-6 pb-8">
-          <div className="max-w-3xl mx-auto">
+        {/* Scrollable Middle Chat Area */}
+        <main className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 sm:px-6 py-4 sm:py-6">
+          <div className="max-w-3xl mx-auto flex flex-col min-h-full">
             {!activeSession || activeSession.messages.length === 0 ? (
-              <div className="min-h-[62vh] flex flex-col items-center justify-center text-center px-2">
-                <div className="max-w-md space-y-2.5 mb-8">
+              <div className="my-auto py-6 flex flex-col items-center justify-center text-center">
+                <div className="max-w-md space-y-2 mb-6 px-2">
                   <h1
-                    className="text-2xl sm:text-3xl font-semibold tracking-tight text-white"
+                    className="text-xl sm:text-2xl font-semibold tracking-tight text-white"
                     style={{ textWrap: 'balance' }}
                   >
-                    What would you like to build or ask?
+                    What would you like to ask?
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                    Zero-config routing across Llama 3.3 70B, GPT-OSS 120B, Qwen 3.5 397B, and Mistral with automatic rate-limit failover.
+                    Free multi-model routing across Llama 3.3 70B, GPT-OSS 120B, Qwen 3.5 397B, and Mistral with automatic failover.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-left">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full max-w-2xl text-left">
                   {STARTER_PROMPTS.map((item, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => sendMessage(item.prompt)}
-                      className="group p-4 rounded-2xl backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.15] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-all cursor-pointer flex flex-col justify-between gap-2"
+                      className="group p-3.5 rounded-2xl backdrop-blur-xl bg-white/[0.035] hover:bg-white/[0.07] border border-white/[0.09] hover:border-white/[0.16] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] transition-all cursor-pointer flex flex-col justify-between gap-1.5"
                     >
-                      <span className="text-xs font-medium text-white/90 group-hover:text-white">
+                      <span className="text-xs font-medium text-white/95 group-hover:text-white">
                         {item.title}
                       </span>
-                      <span className="text-xs text-slate-400 leading-relaxed line-clamp-3">
+                      <span className="text-xs text-slate-400 leading-relaxed line-clamp-2 sm:line-clamp-3">
                         {item.prompt}
                       </span>
                     </button>
@@ -576,7 +590,7 @@ export default function App() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-5 pb-2">
                 {activeSession.messages.map((msg) => (
                   <div
                     key={msg.id}
@@ -585,13 +599,13 @@ export default function App() {
                     }`}
                   >
                     {msg.role === 'user' ? (
-                      <div className="max-w-[85%] sm:max-w-[75%] px-4 py-3 rounded-2xl rounded-br-xs backdrop-blur-xl bg-white/[0.08] border border-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)] text-sm text-white whitespace-pre-wrap leading-relaxed">
+                      <div className="max-w-[88%] sm:max-w-[76%] px-4 py-2.5 rounded-2xl rounded-br-xs backdrop-blur-xl bg-white/[0.09] border border-white/[0.14] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12)] text-sm text-white whitespace-pre-wrap break-words leading-relaxed">
                         {msg.content}
                       </div>
                     ) : (
-                      <div className="w-full max-w-[92%] sm:max-w-[86%] rounded-2xl p-4 sm:p-5 backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] space-y-3">
+                      <div className="w-full max-w-[96%] sm:max-w-[88%] rounded-2xl p-3.5 sm:p-4 backdrop-blur-xl bg-white/[0.035] border border-white/[0.09] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] space-y-2.5">
                         {msg.reasoning && (
-                          <div className="rounded-xl bg-black/25 border border-white/[0.06] px-3 py-2">
+                          <div className="rounded-xl bg-black/30 border border-white/[0.07] px-3 py-2">
                             <button
                               type="button"
                               onClick={() => toggleReasoning(msg.id)}
@@ -605,37 +619,29 @@ export default function App() {
                               <span>Thought Process</span>
                             </button>
                             {expandedReasoningIds[msg.id] && (
-                              <div className="mt-2 pt-2 border-t border-white/[0.06] text-xs font-mono text-slate-400 whitespace-pre-wrap leading-relaxed">
+                              <div className="mt-2 pt-2 border-t border-white/[0.06] text-xs font-mono text-slate-400 whitespace-pre-wrap break-words leading-relaxed">
                                 {msg.reasoning}
                               </div>
                             )}
                           </div>
                         )}
 
-                        <div className="text-sm text-slate-100 whitespace-pre-wrap leading-relaxed">
+                        <div className="text-sm text-slate-100 whitespace-pre-wrap break-words leading-relaxed">
                           {msg.content}
                         </div>
 
                         {/* Clean Unboxed Metadata Footer */}
-                        <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-4 text-[11px] font-mono text-slate-400">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-slate-300">{msg.modelLabel || 'Assistant'}</span>
+                        <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-2 text-[11px] font-mono text-slate-400">
+                          <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+                            <span className="text-slate-300 truncate">{msg.modelLabel || 'Assistant'}</span>
                             <span>·</span>
-                            <span>{msg.providerName}</span>
+                            <span className="truncate">{msg.providerName}</span>
                             {msg.latencyMs !== undefined && (
                               <>
                                 <span>·</span>
                                 <span className="tabular-nums">{msg.latencyMs}ms</span>
                               </>
                             )}
-                            {msg.failoverCount && msg.failoverCount > 0 ? (
-                              <>
-                                <span>·</span>
-                                <span className="text-sky-300">
-                                  failover +{msg.failoverCount}
-                                </span>
-                              </>
-                            ) : null}
                           </div>
 
                           <button
@@ -663,19 +669,19 @@ export default function App() {
 
                 {isSending && (
                   <div className="flex items-start">
-                    <div className="px-4 py-3 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-slate-400">
+                    <div className="px-4 py-2.5 rounded-2xl backdrop-blur-xl bg-white/[0.04] border border-white/[0.09] text-xs font-mono text-slate-300">
                       Thinking...
                     </div>
                   </div>
                 )}
 
                 {errorBanner && (
-                  <div className="px-4 py-3 rounded-2xl backdrop-blur-xl bg-rose-500/10 border border-rose-500/25 text-xs font-mono text-rose-200 flex items-center justify-between">
-                    <span>{errorBanner}</span>
+                  <div className="px-4 py-3 rounded-2xl backdrop-blur-xl bg-rose-500/15 border border-rose-500/30 text-xs font-mono text-rose-200 flex items-center justify-between gap-3">
+                    <span className="break-words">{errorBanner}</span>
                     <button
                       type="button"
                       onClick={() => setErrorBanner(null)}
-                      className="underline hover:text-white ml-4 cursor-pointer"
+                      className="underline hover:text-white shrink-0 cursor-pointer"
                     >
                       Dismiss
                     </button>
@@ -688,14 +694,14 @@ export default function App() {
           </div>
         </main>
 
-        {/* Floating Frosted Glass Composer Dock */}
-        <footer className="shrink-0 px-4 sm:px-6 pb-4 pt-2">
+        {/* Pinned Bottom Glass Composer Bar */}
+        <footer className="shrink-0 z-20 backdrop-blur-2xl bg-[#080C17]/85 border-t border-white/[0.08] px-3 sm:px-6 pt-2.5 safe-bottom">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               sendMessage();
             }}
-            className="max-w-3xl mx-auto rounded-2xl backdrop-blur-2xl bg-white/[0.045] border border-white/[0.11] focus-within:border-white/[0.22] shadow-[0_12px_40px_rgba(0,0,0,0.45),inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all p-2 pl-4 flex items-end gap-2"
+            className="max-w-3xl mx-auto rounded-2xl bg-white/[0.055] border border-white/[0.13] focus-within:border-white/[0.26] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)] transition-all p-1.5 pl-3.5 flex items-end gap-2"
           >
             <textarea
               ref={textareaRef}
@@ -704,7 +710,7 @@ export default function App() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Message OmniFree..."
-              className="flex-1 bg-transparent py-2 text-sm text-white placeholder-slate-400/70 focus:outline-none resize-none max-h-40 leading-relaxed"
+              className="flex-1 bg-transparent py-2 text-sm text-white placeholder-slate-400/75 focus:outline-none resize-none max-h-32 leading-relaxed"
             />
             <button
               type="submit"
